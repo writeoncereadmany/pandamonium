@@ -4,7 +4,7 @@ import Test.HUnit
 import Shape
 import Vector
 
-collisions = TestList [
+rect_rect_collisions = TestList [
   TestLabel "Any overlap means there's a collision"
   $ TestCase (let rectA = Rectangle { left = 10, right = 30, top = 10, bottom = -10 }
                   rectB = Rectangle { left = 10, right = 30, top = 30, bottom = 5 }
@@ -32,7 +32,7 @@ collisions = TestList [
 
   ]
 
-pushout = TestList [
+rect_rect_pushout = TestList [
   TestLabel "No overlap means no pushout required"
   $ TestCase (let rectA = Rectangle { left = 10, right = 30, top = 10, bottom = -10 }
                   rectB = Rectangle { left = 10, right = 30, top = 30, bottom = 15 }
@@ -70,5 +70,45 @@ pushout = TestList [
 
   ]
 
-tests = TestList [ TestLabel "Collisions" collisions
-                 , TestLabel "Pushout" pushout ]
+circle_circle_collisions = TestList [
+  TestLabel "Circles sharing a centre will always overlap"
+  $ TestCase (let circA = Circle { centre = Vector { x = 20, y = 30}, radius = 20 }
+                  circB = Circle { centre = Vector { x = 20, y = 30}, radius = 10 }
+               in (circA !!! circB) @?= True)
+
+  , TestLabel "Horizontally separated circles touching exactly do not overlap"
+  $ TestCase (let circA = Circle { centre = Vector { x = 20, y = 30}, radius = 60 }
+                  circB = Circle { centre = Vector { x = 120, y = 30}, radius = 40 }
+               in (circA !!! circB) @?= False)
+
+  , TestLabel "Vertically separated circles touching exactly do not overlap"
+  $ TestCase (let circA = Circle { centre = Vector { x = 20, y = 30}, radius = 60 }
+                  circB = Circle { centre = Vector { x = 20, y = 130}, radius = 40 }
+               in (circA !!! circB) @?= False)
+
+  , TestLabel "Horizontally separated, with sum of radii just exceeding separation"
+  $ TestCase (let circA = Circle { centre = Vector { x = 20, y = 30}, radius = 60 }
+                  circB = Circle { centre = Vector { x = 120, y = 30}, radius = 41 }
+               in (circA !!! circB) @?= True)
+
+  , TestLabel "Vertically separated, with sum of radii just exceeding separation"
+  $ TestCase (let circA = Circle { centre = Vector { x = 20, y = 30}, radius = 60 }
+                  circB = Circle { centre = Vector { x = 20, y = 130}, radius = 41 }
+               in (circA !!! circB) @?= True)
+
+  , TestLabel "Diagonally separated, less than sum of radii on any one axis"
+  $ TestCase (let circA = Circle { centre = Vector { x = 0, y = 0}, radius = 20 }
+                  circB = Circle { centre = Vector { x = 30, y = 40}, radius = 30 }
+               in (circA !!! circB) @?= False)
+
+  , TestLabel "Diagonally separated, less than sum of radii on any one axis"
+  $ TestCase (let circA = Circle { centre = Vector { x = 0, y = 0}, radius = 21 }
+                  circB = Circle { centre = Vector { x = 30, y = 40}, radius = 30 }
+               in (circA !!! circB) @?= True)
+
+
+  ]
+
+tests = TestList [ TestLabel "Rectangle-Rectangle Collisions" rect_rect_collisions
+                 , TestLabel "Rectangle-Rectangle Pushout" rect_rect_pushout
+                 , TestLabel "Circle-Circle Collisions" circle_circle_collisions ]

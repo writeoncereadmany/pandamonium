@@ -22,6 +22,19 @@ magnitude = sqrt . sq_mag
 sq_mag :: Vector -> Float
 sq_mag vec = x vec * x vec + y vec * y vec
 
+neg :: Vector -> Vector
+neg a = Vector { x = -(x a), y = -(y a) }
+
+infixl 6 ~+
+(~+) :: Vector -> Vector -> Vector
+a ~+ b = Vector { x = x a + x b, y = y a + y b }
+
+infixl 6 ~-
+(~-) :: Vector -> Vector -> Vector
+a ~- b = a ~+ neg b
+
+
+
 -- checks if the magnitude of one vector is bigger than another
 infixl 2 |>|
 (|>|) :: Vector -> Vector -> Bool
