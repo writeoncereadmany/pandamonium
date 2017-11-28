@@ -1,28 +1,16 @@
-module Main where
+module Main(
+  main
+) where
 
 import Graphics.Gloss
 import Codec.BMP
-import System.Environment
 
--- | Displays uncompressed 24/32 bit BMP images.
-main
- = do   args    <- getArgs
-        case args of
-         [fileName] -> run fileName
-         _ -> putStr
-           $  unlines [ "usage: bitmap <file.bmp>"
-                      , "  file.bmp should be a 24 or 32-bit uncompressed BMP file" ]
+window :: Display
+window = InWindow "A window!" (200, 200) (300, 300)
 
-run fileName
- = do   picture@(Bitmap width height _ _)
-                <- loadBMP fileName
+background :: Color
+background = white
 
-        animate (InWindow fileName (width, height) (10,  10))
-                black (frame width height picture)
-
-frame :: Int -> Int -> Picture -> Float -> Picture
-frame width height picture t
-        = Color (greyN (abs $ sin (t * 2)))
-        $ Pictures
-                [rectangleSolid (fromIntegral width) (fromIntegral height)
-                , picture]
+main :: IO ()
+main = do picture <- loadBMP "resources/sprites/ugliness.bmp"
+          display window background picture
