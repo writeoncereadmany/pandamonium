@@ -3,7 +3,7 @@ module ShapeTest where
 import Test.HUnit
 import Shape
 
-tests = TestList [
+collisions = TestList [
   TestLabel "Any overlap means there's a collision"
   $ TestCase (let rectA = Rectangle { left = 10, right = 30, top = 10, bottom = -10 }
                   rectB = Rectangle { left = 10, right = 30, top = 30, bottom = 5 }
@@ -30,3 +30,8 @@ tests = TestList [
                 in (rectA !!! rectB) @=? False)
 
   ]
+
+pushout = TestList []
+
+tests = TestList [ TestLabel "Collisions" collisions
+                 , TestLabel "Pushout" pushout ]
