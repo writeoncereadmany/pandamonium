@@ -1,9 +1,11 @@
 module Shape where
 
 import Vector
+import Renderable
+import Graphics.Gloss (translate, circleSolid, rectangleSolid)
 
 data Shape = Rectangle { left :: Float, right :: Float, top :: Float, bottom :: Float }
-           | Circle { centre :: Point, radius :: Float } deriving (Show, Eq)
+           | Circle { centre :: Vector, radius :: Float } deriving (Show, Eq)
 
 -- checks if two shapes collide, returning a boolean
 infixl 2 !!!
@@ -24,3 +26,14 @@ a@Rectangle {} !!> b@Rectangle {} = foldl1 smallest [ push move_up (top a - bott
                                            push f v = if v <= 0 then Nothing else Just $ f v
                                            smaller a b = if a |>| b then b else a
                                            smallest a b = pure smaller <*> a <*> b
+
+instance Renderable Shape where
+  render r@Rectangle {} = let width = right r - left r
+                              height = top r - bottom r
+                              rect = rectangleSolid width height
+                              shiftRight = left r + (width / 2)
+                              shiftUp = bottom r + (height / 2)
+                           in translate shiftRight shiftUp
+                              $ rect
+  render c@Circle {} = translate (x $ centre c) (y $ centre c)
+                       $ circleSolid (radius c)
