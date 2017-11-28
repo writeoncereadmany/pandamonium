@@ -24,7 +24,12 @@ initialWorld :: World
 initialWorld = (0, 0, 0, 0)
 
 render :: Picture -> World -> Picture
-render sprite (x, y, _, _) = translate x y sprite
+render sprite (x, y, _, _) = withBackground $ translate x y sprite
+
+withBackground :: Picture -> Picture
+withBackground pic = Pictures [ translate (-20) (-30) $ color blue $ circleSolid 50,
+                                translate 40 (-50) $ color green $ circleSolid 40,
+                                pic ]
 
 onEvent :: Event -> World -> World
 onEvent (EventKey key Down _ _) (x, y, dx, dy) = case key of
