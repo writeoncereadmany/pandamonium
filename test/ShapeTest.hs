@@ -106,7 +106,6 @@ circle_circle_collisions = TestList [
                   circB = Circle { centre = Vector { x = 30, y = 40}, radius = 30 }
                in (circA !!! circB) @?= True)
 
-
   ]
 
 tests = TestList [ TestLabel "Rectangle-Rectangle Collisions" rect_rect_collisions
