@@ -20,6 +20,8 @@ description:         Please see the README on Github at <https://github.com/gith
 library
   hs-source-dirs:      src
   exposed-modules:     World
+                     , Block
+                     , Renderable
                      , Entity
                      , Shape
                      , Vector

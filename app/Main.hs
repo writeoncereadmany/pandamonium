@@ -5,8 +5,10 @@ module Main(
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 import Codec.BMP
-
-type World = (Float, Float, Float, Float)
+import World
+import Block
+import Renderable
+import Shape
 
 window :: Display
 window = InWindow "A window!" (200, 200) (300, 300)
@@ -14,33 +16,22 @@ window = InWindow "A window!" (200, 200) (300, 300)
 background :: Color
 background = black
 
-accel :: Float
-accel = 5
-
 fps :: Int
 fps = 60
 
+scene :: [Block]
+scene = [ Block { shape = Rectangle { left = -40, right = -10, top = 10, bottom = -70}, col = red  }
+               , Block { shape = Rectangle { left = 20, right = 50, top = 40, bottom = -100}, col = blue } ]
+
 initialWorld :: World
-initialWorld = (0, 0, 0, 0)
-
-render :: Picture -> World -> Picture
-render sprite (x, y, _, _) = withBackground $ translate x y sprite
-
-withBackground :: Picture -> Picture
-withBackground pic = Pictures [ translate (-20) (-30) $ color blue $ circleSolid 50,
-                                translate 40 (-50) $ color green $ circleSolid 40,
-                                pic ]
+initialWorld = World { scenery = scene, entities = [] }
 
 onEvent :: Event -> World -> World
-onEvent (EventKey key Down _ _) (x, y, dx, dy) = case key of
-  (Char 'a') -> (x, y, dx - accel, dy)
-  (Char 's') -> (x, y, dx + accel, dy)
-  _ -> (x, y, dx, dy)
-onEvent _ world = world
+onEvent event world = world
 
 onTime :: Float -> World -> World
-onTime t (x, y, dx, dy) = (x + (dx * t), y + (dy * t), dx, dy)
+onTime t world = world
 
 main :: IO ()
 main = do sprite <- loadBMP "resources/sprites/ugliness.bmp"
-          play window background fps initialWorld (render sprite) onEvent onTime
+          play window background fps initialWorld render onEvent onTime

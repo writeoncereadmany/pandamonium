@@ -3,7 +3,7 @@ module Shape where
 import Vector
 
 data Shape = Rectangle { left :: Float, right :: Float, top :: Float, bottom :: Float }
-           | Circle { centre :: Point, radius :: Float }
+           | Circle { centre :: Point, radius :: Float } deriving (Show, Eq)
 
 -- checks if two shapes collide, returning a boolean
 infixl 2 !!!
