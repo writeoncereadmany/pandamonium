@@ -8,4 +8,4 @@ data Shape = Rectangle { left :: Float, right :: Float, top :: Float, bottom :: 
            | Circle { centre :: Point, radius :: Float } deriving (Show, Eq)
 
 (!!!) :: Shape -> Shape -> Bool
-a@Rectangle {} !!! b@Rectangle {} = not (top a < bottom b || top b < bottom a)
+a@Rectangle {} !!! b@Rectangle {} = not (top a < bottom b || top b < bottom a || left a > right b || left b > right a)
