@@ -108,6 +108,14 @@ circle_circle_collisions = TestList [
 
   ]
 
+circle_circle_pushout = TestList [
+    TestLabel "Horizontally non-overlapping circles don't push out"
+    $ TestCase ( let circA = Circle {centre = Vector {x = 0, y = 0}, radius = 10}
+                     circB = Circle { centre = Vector {x = 20, y = 0}, radius = 5}
+                  in ( circA !!> circB) @?= Nothing)
+    ]
+
 tests = TestList [ TestLabel "Rectangle-Rectangle Collisions" rect_rect_collisions
                  , TestLabel "Rectangle-Rectangle Pushout" rect_rect_pushout
-                 , TestLabel "Circle-Circle Collisions" circle_circle_collisions ]
+                 , TestLabel "Circle-Circle Collisions" circle_circle_collisions
+                 , TestLabel "Circle-Circle Pushout" circle_circle_pushout ]

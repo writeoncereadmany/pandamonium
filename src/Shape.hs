@@ -26,6 +26,8 @@ a@Rectangle {} !!> b@Rectangle {} = foldl1 smallest [ push move_up (top a - bott
                                            push f v = if v <= 0 then Nothing else Just $ f v
                                            smaller a b = if a |>| b then b else a
                                            smallest a b = pure smaller <*> a <*> b
+a@Circle {} !!> b@Circle {} = Nothing 
+
 
 instance Renderable Shape where
   render r@Rectangle {} = let width = right r - left r
